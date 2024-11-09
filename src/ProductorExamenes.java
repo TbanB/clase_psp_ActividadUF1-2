@@ -6,26 +6,32 @@ public class ProductorExamenes implements Runnable {
     private static int numeroExamen = 0;
     private Thread hilo;
 
+    /**
+     * En este método creamos el código con el que identificaremos cada uno de los examenes.
+     * @param buffer
+     */
     public ProductorExamenes(BufferExamenes buffer) {
-        // Incrementa el contador de exámenes (variable numeroExamen).
-
-        // Construye el hilo. El nombre será la letra E seguida
-        // del valor de la variable numeroExamen.
-
-        // Establece el valor de la propiedad buffer
-        // Inicia el hilo.
+        /**
+         * añadimos +1 al contador cada vez que ejecutamos el método, y creamos un nuevo hilo con el nombre basado en el código del examen.
+         */
+        numeroExamen++;
+        this.buffer = buffer;
+        this.hilo = new Thread(this, "E" + numeroExamen);
+        this.hilo.start();
     }
 
+    /**
+     * Este método contiene el código que se ejecutará cuando el hilo se inicie.
+     */
     @Override
     public void run() {
+        /**
+         * generamos el código con el año actual y lo añadimos al buffer compartido.
+         */
         int aa = LocalDateTime.now().getYear();
-        // Generación del código de examen.
         String codigo = this.hilo.getName() + "-" +aa;
 
-        // Añade el nuevo código al buffer de exámenes.
-
-        // Muestra un mensaje en consola informando sobre el
-        // código del examen que se acaba de producir.
+        buffer.fabricarNuevoExamen(codigo);
     }
 
 }
